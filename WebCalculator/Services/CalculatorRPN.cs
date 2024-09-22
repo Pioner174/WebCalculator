@@ -60,33 +60,24 @@ namespace WebCalculator.Services
                 }
                 else if (value == ")") //Закрывающая скобка
                 {
-                    if (operators.Count > 0)
+                    while (operators.Count > 0 && operators.Peek() != "(")
                     {
-                        while (operators.Peek() != "(")
-                        {
-                            result.Add(operators.Pop());
-                        }
+                        result.Add(operators.Pop());
                     }
 
                 }
                 else if (_operations.ContainsKey(value))// Обработка знака
                 {
-                    if (operators.Count > 0)
-                    {
-                        while (_operations.ContainsKey(operators.Peek()))//Поработать над очередностью
-                        {
-                            result.Add(operators.Pop());
-                        }
-                    }
-                    else
-                    {
-                        operators.Push(value);
-                    }
-
                     
+                    while (operators.Count > 0 && _operations.ContainsKey(operators.Peek()))
+                    {
+                        if(_operations[operators.Peek()].Priority > _operations[value].Priority)//Реализация с приоритетом
+                            result.Add(operators.Pop());
+                    }
+                    
+                    operators.Push(value);
+                      
                 }
-
-
             }
 
             while (operators.Count > 0)
