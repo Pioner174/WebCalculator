@@ -1,4 +1,6 @@
 ﻿using WebCalculator;
+using WebCalculator.Services;
+using WebCalculator.Services.Abstraction;
 
 namespace CalculatorTests
 {
@@ -9,7 +11,7 @@ namespace CalculatorTests
         [SetUp]
         public void Setup()
         {
-            _calculator = new ICalculator(); 
+            _calculator = new CalculatorRPN(); 
         }
 
         [Test]
