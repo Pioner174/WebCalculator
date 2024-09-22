@@ -23,10 +23,14 @@ namespace WebCalculator.Services
         {
             //1. Разделение строки на символы знаков и числа
             var symbols = GetSymbols(expression);
+
             //2. Преобразование в RPN
             var rpnString = ConvertToRPN(symbols);
+
             //3. Вычисление значения
-            throw new NotImplementedException();
+            var result = CalculationRPN(rpnString);
+            
+            return result;
         }
 
         private List<string> GetSymbols(string input)
@@ -87,6 +91,29 @@ namespace WebCalculator.Services
 
             return result;
 
+        }
+
+        private double CalculationRPN(List<string> tokens)
+        {
+            var stack = new Stack<double>();
+
+            foreach (var token in tokens)
+            {
+                if (double.TryParse(token, out var number))
+                {
+                    stack.Push(number);
+                }
+                else if (_operations.ContainsKey(token))
+                {
+                    var right = stack.Pop();
+                    var left = stack.Pop();
+
+                    var result = _operations[token].Execute(left, right);
+                    stack.Push(result);
+                }
+            }
+
+            return stack.Pop();
         }
     }
 }
