@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using WebCalculator.Services.Abstraction;
 
 namespace WebCalculator.Services
@@ -35,13 +36,13 @@ namespace WebCalculator.Services
 
         private List<string> GetSymbols(string input)
         {
-            var regex = new Regex("^(((\\d*\\.?\\d*)|\\w)([+-/*]))*((\\d*\\.?\\d*)|\\w)$");
+            var regex = new Regex(@"\d+(\.\d+)?|[\+\-\*/\(\)]");
             var matches = regex.Matches(input);
 
             var result = new List<string>();
-            foreach (string value in matches)
+            foreach (Match match in matches)
             {
-                result.Add(value);
+                result.Add(match.Value);
             }
 
             return result;
@@ -54,7 +55,7 @@ namespace WebCalculator.Services
 
             foreach (string value in symbols)
             {
-                if(double.TryParse(value, out _))
+                if(double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
                 {
                     result.Add(value);
                 }
@@ -69,14 +70,15 @@ namespace WebCalculator.Services
                         result.Add(operators.Pop());
                     }
 
+                    operators.Pop();
                 }
                 else if (_operations.ContainsKey(value))// Обработка знака
                 {
                     
-                    while (operators.Count > 0 && _operations.ContainsKey(operators.Peek()))
-                    {
-                        if(_operations[operators.Peek()].Priority > _operations[value].Priority)//Реализация с приоритетом
-                            result.Add(operators.Pop());
+                    while (operators.Count > 0 && _operations.ContainsKey(operators.Peek()) &&
+                        (_operations[operators.Peek()].Priority > _operations[value].Priority))//Реализация с приоритетом
+                    {     
+                        result.Add(operators.Pop());
                     }
                     
                     operators.Push(value);
@@ -99,7 +101,7 @@ namespace WebCalculator.Services
 
             foreach (var token in tokens)
             {
-                if (double.TryParse(token, out var number))
+                if (double.TryParse(token, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
                 {
                     stack.Push(number);
                 }

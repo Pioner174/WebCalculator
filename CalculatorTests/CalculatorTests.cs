@@ -55,6 +55,14 @@ namespace CalculatorTests
         }
 
         [Test]
+        public void Test_Parentheses2()
+        {
+            string expression = "(2.05+0.05)*2/0.2";
+            var result = _calculator.Calculate(expression);
+            Assert.That(result, Is.EqualTo(11));
+        }
+
+        [Test]
         public void Test_InvalidExpression()
         {
             string expression = "2++3"; // Некорректное выражение
