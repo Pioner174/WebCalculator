@@ -34,6 +34,9 @@ namespace WebCalculator.Services
         public int Priority => 1;
         public double Execute(double left, double right)
         {
+            if (right == 0)
+                throw new DivideByZeroException("Ошибка деления на 0");
+
             return left / right;
         }
     }
