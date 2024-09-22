@@ -5,7 +5,7 @@ namespace WebCalculator.Services
     public class Addition : IOperation
     {
         public int Priority => 1;
-        public double Execute(double left, double right)
+        public decimal Execute(decimal left, decimal right)
         {
             return left + right;
         }
@@ -14,7 +14,7 @@ namespace WebCalculator.Services
     public class Subtraction : IOperation
     {
         public int Priority => 1;
-        public double Execute(double left, double right)
+        public decimal Execute(decimal left, decimal right)
         {
             return left - right;
         }
@@ -23,7 +23,7 @@ namespace WebCalculator.Services
     public class Multiplication : IOperation
     {
         public int Priority => 1;
-        public double Execute(double left, double right)
+        public decimal Execute(decimal left, decimal right)
         {
             return left * right;
         }
@@ -32,7 +32,7 @@ namespace WebCalculator.Services
     public class Division : IOperation
     {
         public int Priority => 1;
-        public double Execute(double left, double right)
+        public decimal Execute(decimal left, decimal right)
         {
             if (right == 0)
                 throw new DivideByZeroException("Ошибка деления на 0");

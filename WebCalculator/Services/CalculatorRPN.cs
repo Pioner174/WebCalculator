@@ -20,7 +20,7 @@ namespace WebCalculator.Services
             };
         }
 
-        public double Calculate(string expression)
+        public decimal Calculate(string expression)
         {
             //1. Разделение строки на символы знаков и числа
             var symbols = GetSymbols(expression);
@@ -55,7 +55,7 @@ namespace WebCalculator.Services
 
             foreach (string value in symbols)
             {
-                if(double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                if(decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
                 {
                     result.Add(value);
                 }
@@ -76,7 +76,7 @@ namespace WebCalculator.Services
                 {
                     
                     while (operators.Count > 0 && _operations.ContainsKey(operators.Peek()) &&
-                        (_operations[operators.Peek()].Priority > _operations[value].Priority))//Реализация с приоритетом
+                        (_operations[operators.Peek()].Priority >= _operations[value].Priority))//Реализация с приоритетом
                     {     
                         result.Add(operators.Pop());
                     }
@@ -95,13 +95,13 @@ namespace WebCalculator.Services
 
         }
 
-        private double CalculationRPN(List<string> tokens)
+        private decimal CalculationRPN(List<string> tokens)
         {
-            var stack = new Stack<double>();
+            var stack = new Stack<decimal>();
 
             foreach (var token in tokens)
             {
-                if (double.TryParse(token, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
+                if (decimal.TryParse(token, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
                 {
                     stack.Push(number);
                 }

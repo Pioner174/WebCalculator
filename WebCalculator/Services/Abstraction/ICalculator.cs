@@ -2,6 +2,6 @@
 {
     public interface ICalculator
     {
-        public double Calculate(string expression);
+        public decimal Calculate(string expression);
     }
 }

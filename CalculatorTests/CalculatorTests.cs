@@ -59,7 +59,7 @@ namespace CalculatorTests
         {
             string expression = "(2.05+0.05)*2/0.2";
             var result = _calculator.Calculate(expression);
-            Assert.That(result, Is.EqualTo(11));
+            Assert.That(result, Is.EqualTo(21));
         }
 
         [Test]
