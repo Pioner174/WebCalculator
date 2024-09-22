@@ -1,4 +1,6 @@
 using WebCalculator.Components;
+using WebCalculator.Services.Abstraction;
+using WebCalculator.Services;
 
 namespace WebCalculator
 {
@@ -11,6 +13,8 @@ namespace WebCalculator
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            builder.Services.AddScoped<ICalculator, CalculatorRPN>();
 
             var app = builder.Build();
 

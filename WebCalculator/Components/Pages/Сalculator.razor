@@ -1,0 +1,47 @@
+﻿@page "/calculator"
+@rendermode InteractiveServer
+
+@using System.Text.RegularExpressions
+
+<PageTitle>Calculator</PageTitle>
+
+<h3>Calculator</h3>
+
+<div class="mb-3">
+    <label for="expressionInput" class="form-label">Введите выражение для расчёта:</label>
+    <input id="expressionInput" class="form-control" @bind="expression" />
+</div>
+
+<button class="btn btn-primary" @onclick="CalculateExpression">Расчитать</button>
+
+@if (!string.IsNullOrEmpty(resultMessage))
+{
+    <div class="alert alert-info mt-3">@resultMessage</div>
+}
+
+@code {
+    private string expression;
+    private string resultMessage;
+    private readonly Regex expressionRegex = new Regex(@"^[0-9\.\+\-\*/\(\)\s]+$");
+
+    [Inject] private ICalculator Calculator { get; set; }  // Инъекция зависимости для калькулятора
+
+    private void CalculateExpression()
+    {
+        if (!expressionRegex.IsMatch(expression))
+        {
+            resultMessage = "Не верный формат ";
+            return;
+        }
+
+        try
+        {
+            decimal result = Calculator.Calculate(expression);
+            resultMessage = $"Результат: {result}";
+        }
+        catch (Exception ex)
+        {
+            resultMessage = $"Ошибка расчёта, проверьте правильность ввода.";
+        }
+    }
+}
