@@ -24,6 +24,7 @@ namespace WebCalculator.Services
             //1. Разделение строки на символы знаков и числа
             var symbols = GetSymbols(expression);
             //2. Преобразование в RPN
+            var rpnString = ConvertToRPN(symbols);
             //3. Вычисление значения
             throw new NotImplementedException();
         }
@@ -40,6 +41,61 @@ namespace WebCalculator.Services
             }
 
             return result;
+        }
+
+        private List<string> ConvertToRPN(List<string> symbols)
+        {
+            var result = new List<string>();
+            var operators = new Stack<string>();
+
+            foreach (string value in symbols)
+            {
+                if(double.TryParse(value, out _))
+                {
+                    result.Add(value);
+                }
+                else if (value == "(") //Открывающая скобка
+                {
+                    operators.Push(value);
+                }
+                else if (value == ")") //Закрывающая скобка
+                {
+                    if (operators.Count > 0)
+                    {
+                        while (operators.Peek() != "(")
+                        {
+                            result.Add(operators.Pop());
+                        }
+                    }
+
+                }
+                else if (_operations.ContainsKey(value))// Обработка знака
+                {
+                    if (operators.Count > 0)
+                    {
+                        while (_operations.ContainsKey(operators.Peek()))//Поработать над очередностью
+                        {
+                            result.Add(operators.Pop());
+                        }
+                    }
+                    else
+                    {
+                        operators.Push(value);
+                    }
+
+                    
+                }
+
+
+            }
+
+            while (operators.Count > 0)
+            {
+                result.Add(operators.Pop());
+            }
+
+            return result;
+
         }
     }
 }
